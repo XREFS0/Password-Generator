@@ -1,0 +1,105 @@
+<UserControl x:Class="MASA.PasswordGenerator.App.Views.SettingsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:enums="clr-namespace:MASA.PasswordGenerator.Core.Enums;assembly=MASA.PasswordGenerator.Core"
+             xmlns:converters="clr-namespace:MASA.PasswordGenerator.App.Converters"
+             mc:Ignorable="d" 
+             d:DesignHeight="850" d:DesignWidth="850">
+    <UserControl.Resources>
+        <converters:BooleanToVisibilityConverter x:Key="BoolToVis"/>
+    </UserControl.Resources>
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <StackPanel Margin="30">
+            <!-- Header -->
+            <TextBlock Text="Application Settings" FontSize="24" FontWeight="Bold" Foreground="{DynamicResource TextPrimaryBrush}" Margin="0,0,0,5"/>
+            <TextBlock Text="Configure security options, themes, clipboard memory wipe intervals, and default generation rules." FontSize="14" Foreground="{DynamicResource TextSecondaryBrush}" Margin="0,0,0,25"/>
+
+            <!-- Appearance & Themes -->
+            <Border Style="{DynamicResource ModernCard}" Margin="0,0,0,20">
+                <StackPanel>
+                    <TextBlock Text="Appearance" FontSize="16" FontWeight="SemiBold" Foreground="{DynamicResource TextPrimaryBrush}" Margin="0,0,0,15"/>
+
+                    <Grid Margin="0,0,0,10">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="180"/>
+                            <ColumnDefinition Width="200"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="Color Theme" FontSize="14" FontWeight="Medium" Foreground="{DynamicResource TextPrimaryBrush}" VerticalAlignment="Center"/>
+                        <ComboBox Grid.Column="1"
+                                  SelectedValue="{Binding SelectedTheme, Mode=TwoWay}"
+                                  SelectedValuePath="Tag"
+                                  Padding="10,6"
+                                  FontSize="14">
+                            <ComboBoxItem Content="Dark Theme" Tag="{x:Static enums:ThemeMode.Dark}"/>
+                            <ComboBoxItem Content="Light Theme" Tag="{x:Static enums:ThemeMode.Light}"/>
+                            <ComboBoxItem Content="Follow System" Tag="{x:Static enums:ThemeMode.System}"/>
+                        </ComboBox>
+                    </Grid>
+                </StackPanel>
+            </Border>
+
+            <!-- Security & Clipboard Protection -->
+            <Border Style="{DynamicResource ModernCard}" Margin="0,0,0,20">
+                <StackPanel>
+                    <TextBlock Text="Security &amp; Memory Hygiene" FontSize="16" FontWeight="SemiBold" Foreground="{DynamicResource TextPrimaryBrush}" Margin="0,0,0,15"/>
+
+                    <!-- Clipboard Auto-Clear -->
+                    <CheckBox Style="{DynamicResource ModernCheckBox}" 
+                              Content="Enable Clipboard Auto-Clear (Wipes copied passwords from RAM/Clipboard)" 
+                              IsChecked="{Binding ClipboardAutoClear, Mode=TwoWay}" 
+                              Margin="0,0,0,15"/>
+
+                    <Grid Margin="30,0,0,20">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="220"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="60"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="Auto-Clear Delay (seconds)" FontSize="14" Foreground="{DynamicResource TextPrimaryBrush}" VerticalAlignment="Center"/>
+                        <Slider Grid.Column="1"
+                                Minimum="5"
+                                Maximum="120"
+                                Value="{Binding ClipboardAutoClearSeconds, Mode=TwoWay}"
+                                Margin="20,0"
+                                VerticalAlignment="Center"
+                                TickFrequency="5"
+                                IsSnapToTickEnabled="True"/>
+                        <TextBox Grid.Column="2"
+                                 Text="{Binding ClipboardAutoClearSeconds, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                 Style="{DynamicResource ModernTextBox}"
+                                 HorizontalContentAlignment="Center"
+                                 FontWeight="Bold"/>
+                    </Grid>
+
+                    <Separator Background="{DynamicResource BorderBrush}" Margin="0,0,0,15"/>
+
+                    <!-- History Toggle -->
+                    <CheckBox Style="{DynamicResource ModernCheckBox}" 
+                              Content="Enable Local Password History (Encrypted with Windows DPAPI)" 
+                              IsChecked="{Binding HistoryEnabled, Mode=TwoWay}" 
+                              Margin="0,0,0,10"/>
+                    <TextBlock Text="When disabled, zero password traces are persisted to disk." Foreground="{DynamicResource TextSecondaryBrush}" FontSize="12" Margin="30,0,0,15"/>
+
+                    <!-- Breach Check Opt-in -->
+                    <CheckBox Style="{DynamicResource ModernCheckBox}" 
+                              Content="Allow Optional k-Anonymity Online Breach Checking" 
+                              IsChecked="{Binding BreachCheckEnabled, Mode=TwoWay}" 
+                              Margin="0,0,0,10"/>
+                    <TextBlock Text="When enabled, sends only SHA-1 5-character prefixes over HTTPS to check known breaches. Passwords are NEVER transmitted in raw form." Foreground="{DynamicResource TextSecondaryBrush}" FontSize="12" Margin="30,0,0,0"/>
+                </StackPanel>
+            </Border>
+
+            <!-- Save Action & Alert -->
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,10,0,0">
+                <Border Background="{DynamicResource SuccessBrush}" CornerRadius="6" Padding="12,8" Margin="0,0,15,0"
+                        Visibility="{Binding IsNotificationVisible, Converter={StaticResource BoolToVis}}">
+                    <TextBlock Text="{Binding Notification}" Foreground="White" FontWeight="Bold" FontSize="13"/>
+                </Border>
+                <Button Style="{DynamicResource ModernPrimaryButton}" Content="Save Settings" Command="{Binding SaveSettingsCommand}" Padding="25,12"/>
+            </StackPanel>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

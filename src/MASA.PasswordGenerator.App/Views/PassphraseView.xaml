@@ -1,0 +1,149 @@
+<UserControl x:Class="MASA.PasswordGenerator.App.Views.PassphraseView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:converters="clr-namespace:MASA.PasswordGenerator.App.Converters"
+             mc:Ignorable="d" 
+             d:DesignHeight="750" d:DesignWidth="850">
+    <UserControl.Resources>
+        <converters:StrengthToColorConverter x:Key="StrengthToColorConverter"/>
+        <converters:StrengthToProgressConverter x:Key="StrengthToProgressConverter"/>
+        <converters:BooleanToVisibilityConverter x:Key="BoolToVis"/>
+    </UserControl.Resources>
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <StackPanel Margin="30">
+            <!-- Title -->
+            <TextBlock Text="Passphrase Generator" FontSize="24" FontWeight="Bold" Foreground="{DynamicResource TextPrimaryBrush}" Margin="0,0,0,5"/>
+            <TextBlock Text="Create memorable, multi-word Diceware passphrases combining high entropy with human readability." FontSize="14" Foreground="{DynamicResource TextSecondaryBrush}" Margin="0,0,0,25"/>
+
+            <!-- Result Card -->
+            <Border Style="{DynamicResource ModernCard}" Margin="0,0,0,20">
+                <StackPanel>
+                    <Grid Margin="0,0,0,15">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBox Text="{Binding GeneratedPassphrase, Mode=OneWay}"
+                                 IsReadOnly="True"
+                                 FontSize="19"
+                                 FontFamily="Consolas, Cascadia Code, Courier New"
+                                 FontWeight="Bold"
+                                 Padding="14,12"
+                                 Background="{DynamicResource BgInputBrush}"
+                                 Foreground="{DynamicResource TextPrimaryBrush}"
+                                 BorderBrush="{DynamicResource BorderBrush}"
+                                 BorderThickness="1"/>
+                        <Button Grid.Column="1"
+                                Style="{DynamicResource ModernSecondaryButton}"
+                                Content="Copy"
+                                Command="{Binding CopyCommand}"
+                                Margin="10,0,0,0"
+                                Padding="20,10"/>
+                        <Button Grid.Column="2"
+                                Style="{DynamicResource ModernPrimaryButton}"
+                                Content="Generate"
+                                Command="{Binding GenerateCommand}"
+                                Margin="10,0,0,0"
+                                Padding="22,10"/>
+                    </Grid>
+
+                    <!-- Strength & Entropy details -->
+                    <Grid Margin="0,5,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                            <TextBlock Text="Strength: " Foreground="{DynamicResource TextSecondaryBrush}" FontSize="13"/>
+                            <TextBlock Text="{Binding Strength.StrengthLabel}" 
+                                       FontWeight="Bold"
+                                       Foreground="{Binding Strength.Strength, Converter={StaticResource StrengthToColorConverter}}"
+                                       FontSize="13"/>
+                        </StackPanel>
+
+                        <ProgressBar Grid.Column="1"
+                                     Height="8"
+                                     Margin="20,0"
+                                     Value="{Binding Strength.Strength, Converter={StaticResource StrengthToProgressConverter}}"
+                                     Foreground="{Binding Strength.Strength, Converter={StaticResource StrengthToColorConverter}}"
+                                     Background="{DynamicResource BgCardHoverBrush}"
+                                     BorderThickness="0"/>
+
+                        <TextBlock Grid.Column="2"
+                                   Text="{Binding Strength.EntropyBits, StringFormat='Entropy: {0:F1} bits'}"
+                                   FontWeight="SemiBold"
+                                   Foreground="{DynamicResource TextSecondaryBrush}"
+                                   FontSize="13"/>
+                    </Grid>
+
+                    <Border Background="{DynamicResource PrimaryBrush}" CornerRadius="6" Padding="10,6" Margin="0,15,0,0"
+                            Visibility="{Binding IsNotificationVisible, Converter={StaticResource BoolToVis}}"
+                            HorizontalAlignment="Left">
+                        <TextBlock Text="{Binding CopyNotification}" Foreground="White" FontWeight="Medium" FontSize="13"/>
+                    </Border>
+                </StackPanel>
+            </Border>
+
+            <!-- Configuration -->
+            <Border Style="{DynamicResource ModernCard}">
+                <StackPanel>
+                    <TextBlock Text="Passphrase Configuration" FontSize="16" FontWeight="SemiBold" Foreground="{DynamicResource TextPrimaryBrush}" Margin="0,0,0,20"/>
+
+                    <!-- Word Count -->
+                    <Grid Margin="0,0,0,20">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="160"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="60"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="Number of Words" FontSize="14" FontWeight="Medium" Foreground="{DynamicResource TextPrimaryBrush}" VerticalAlignment="Center"/>
+                        <Slider Grid.Column="1"
+                                Minimum="3"
+                                Maximum="12"
+                                Value="{Binding WordCount, Mode=TwoWay}"
+                                Margin="20,0"
+                                VerticalAlignment="Center"
+                                TickFrequency="1"
+                                IsSnapToTickEnabled="True"/>
+                        <TextBox Grid.Column="2"
+                                 Text="{Binding WordCount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                 Style="{DynamicResource ModernTextBox}"
+                                 HorizontalContentAlignment="Center"
+                                 FontWeight="Bold"/>
+                    </Grid>
+
+                    <!-- Separator -->
+                    <Grid Margin="0,0,0,20">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="160"/>
+                            <ColumnDefinition Width="120"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="Word Separator" FontSize="14" FontWeight="Medium" Foreground="{DynamicResource TextPrimaryBrush}" VerticalAlignment="Center"/>
+                        <TextBox Grid.Column="1"
+                                 Text="{Binding Separator, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                 Style="{DynamicResource ModernTextBox}"
+                                 HorizontalContentAlignment="Center"
+                                 FontWeight="Bold"/>
+                    </Grid>
+
+                    <Separator Background="{DynamicResource BorderBrush}" Margin="0,5,0,20"/>
+
+                    <!-- Toggles -->
+                    <CheckBox Style="{DynamicResource ModernCheckBox}" 
+                              Content="Include Random Number In Passphrase" 
+                              IsChecked="{Binding IncludeNumber, Mode=TwoWay}" 
+                              Margin="0,0,0,15"/>
+
+                    <CheckBox Style="{DynamicResource ModernCheckBox}" 
+                              Content="Capitalize First Letter of Words" 
+                              IsChecked="{Binding CapitalizeFirstLetter, Mode=TwoWay}"/>
+                </StackPanel>
+            </Border>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

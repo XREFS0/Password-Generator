@@ -1,0 +1,111 @@
+<UserControl x:Class="MASA.PasswordGenerator.App.Views.HistoryView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:converters="clr-namespace:MASA.PasswordGenerator.App.Converters"
+             mc:Ignorable="d" 
+             d:DesignHeight="750" d:DesignWidth="850">
+    <UserControl.Resources>
+        <converters:StrengthToColorConverter x:Key="StrengthToColorConverter"/>
+        <converters:BooleanToVisibilityConverter x:Key="BoolToVis"/>
+    </UserControl.Resources>
+
+    <Grid Margin="30">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Header -->
+        <StackPanel Grid.Row="0" Margin="0,0,0,20">
+            <TextBlock Text="Password History" FontSize="24" FontWeight="Bold" Foreground="{DynamicResource TextPrimaryBrush}" Margin="0,0,0,5"/>
+            <TextBlock Text="Local DPAPI-encrypted log. Storage is strictly local and disabled by default for privacy." FontSize="14" Foreground="{DynamicResource TextSecondaryBrush}"/>
+        </StackPanel>
+
+        <!-- Controls / Search Bar -->
+        <Border Grid.Row="1" Style="{DynamicResource ModernCard}" Margin="0,0,0,20">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="20"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="20"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <CheckBox Style="{DynamicResource ModernCheckBox}" 
+                          Content="Enable Password History (DPAPI Encrypted)" 
+                          IsChecked="{Binding IsHistoryEnabled, Mode=TwoWay}"
+                          Command="{Binding ToggleHistoryStatusCommand}"
+                          VerticalAlignment="Center"/>
+
+                <TextBox Grid.Column="2" 
+                         Text="{Binding SearchQuery, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                         Style="{DynamicResource ModernTextBox}"
+                         Tag="Search history..."
+                         VerticalAlignment="Center"/>
+
+                <StackPanel Grid.Column="4" Orientation="Horizontal">
+                    <Button Style="{DynamicResource ModernSecondaryButton}" Content="Clear All History" Command="{Binding ClearAllCommand}"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <!-- History Table -->
+        <Border Grid.Row="2" Style="{DynamicResource ModernCard}" Padding="0">
+            <DataGrid ItemsSource="{Binding HistoryEntries}"
+                      AutoGenerateColumns="False"
+                      CanUserAddRows="False"
+                      IsReadOnly="True"
+                      Background="Transparent"
+                      RowBackground="{DynamicResource BgCardBrush}"
+                      AlternatingRowBackground="{DynamicResource BgCardHoverBrush}"
+                      Foreground="{DynamicResource TextPrimaryBrush}"
+                      BorderThickness="0"
+                      GridLinesVisibility="Horizontal"
+                      HorizontalGridLinesBrush="{DynamicResource BorderBrush}"
+                      HeadersVisibility="Column">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Password" 
+                                        Binding="{Binding Password}" 
+                                        Width="*"
+                                        FontFamily="Consolas, Cascadia Code"
+                                        FontWeight="Bold"/>
+                    <DataGridTextColumn Header="Type" Binding="{Binding GeneratorType}" Width="120"/>
+                    <DataGridTextColumn Header="Length" Binding="{Binding Length}" Width="80"/>
+                    <DataGridTemplateColumn Header="Strength" Width="130">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Strength}"
+                                           Foreground="{Binding Strength, Converter={StaticResource StrengthToColorConverter}}"
+                                           FontWeight="Bold"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTextColumn Header="Date Created" Binding="{Binding CreatedAt, StringFormat='{}{0:yyyy-MM-dd HH:mm}'}" Width="150"/>
+                    <DataGridTemplateColumn Header="Actions" Width="140">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <Button Style="{DynamicResource ModernSecondaryButton}" 
+                                            Content="Copy"
+                                            Padding="8,4"
+                                            Margin="0,0,6,0"
+                                            Command="{Binding DataContext.CopyPasswordCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                            CommandParameter="{Binding}"/>
+                                    <Button Style="{DynamicResource ModernSecondaryButton}" 
+                                            Content="Delete"
+                                            Padding="8,4"
+                                            Command="{Binding DataContext.DeleteEntryCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                            CommandParameter="{Binding}"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                </DataGrid.Columns>
+            </DataGrid>
+        </Border>
+    </Grid>
+</UserControl>

@@ -1,0 +1,25 @@
+## Build artifacts
+bin/
+obj/
+[Bb]in/
+[Oo]bj/
+
+## Visual Studio & IDE files
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+## User data & SQLite databases
+*.db
+*.db-shm
+*.db-wal
+Screenshots/test_*.png
+Screenshots/temp_*.png
+
+## .NET Core
+project.lock.json
+.nuget/
+*.nuget.props
+*.nuget.targets

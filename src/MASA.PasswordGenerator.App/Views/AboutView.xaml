@@ -1,0 +1,94 @@
+<UserControl x:Class="MASA.PasswordGenerator.App.Views.AboutView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             mc:Ignorable="d" 
+             d:DesignHeight="700" d:DesignWidth="850">
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <StackPanel Margin="30">
+            <!-- Header Brand Card -->
+            <Border Background="{DynamicResource VibrantHeroGradient}" CornerRadius="16" Padding="35" Margin="0,0,0,25">
+                <StackPanel>
+                    <TextBlock Text="MASA Password Generator" FontSize="26" FontWeight="Bold" Foreground="White" Margin="0,0,0,8"/>
+                    <TextBlock Text="Advanced Cryptographic Security &amp; Entropy Engine for Windows" FontSize="15" Foreground="#E2E8F0"/>
+                </StackPanel>
+            </Border>
+
+            <!-- Specifications Card -->
+            <Border Style="{DynamicResource ModernCard}" Margin="0,0,0,20">
+                <StackPanel>
+                    <TextBlock Text="System Architecture &amp; Security Principles" FontSize="16" FontWeight="SemiBold" Foreground="{DynamicResource TextPrimaryBrush}" Margin="0,0,0,20"/>
+
+                    <Grid Margin="0,0,0,12">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="200"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="Framework / Platform" Foreground="{DynamicResource TextSecondaryBrush}" FontWeight="Medium"/>
+                        <TextBlock Grid.Column="1" Text="C# .NET 8 (Windows Presentation Foundation - WPF)" Foreground="{DynamicResource TextPrimaryBrush}" FontWeight="SemiBold"/>
+                    </Grid>
+
+                    <Grid Margin="0,0,0,12">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="200"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="Architecture Pattern" Foreground="{DynamicResource TextSecondaryBrush}" FontWeight="Medium"/>
+                        <TextBlock Grid.Column="1" Text="Clean Architecture + MVVM (CommunityToolkit.Mvvm) + DI" Foreground="{DynamicResource TextPrimaryBrush}" FontWeight="SemiBold"/>
+                    </Grid>
+
+                    <Grid Margin="0,0,0,12">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="200"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="RNG Cryptography" Foreground="{DynamicResource TextSecondaryBrush}" FontWeight="Medium"/>
+                        <TextBlock Grid.Column="1" Text="System.Security.Cryptography.RandomNumberGenerator (Zero System.Random)" Foreground="{DynamicResource TextPrimaryBrush}" FontWeight="SemiBold"/>
+                    </Grid>
+
+                    <Grid Margin="0,0,0,12">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="200"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="Local Storage Security" Foreground="{DynamicResource TextSecondaryBrush}" FontWeight="Medium"/>
+                        <TextBlock Grid.Column="1" Text="Windows DPAPI (Data Protection API) + SQLite" Foreground="{DynamicResource TextPrimaryBrush}" FontWeight="SemiBold"/>
+                    </Grid>
+
+                    <Grid Margin="0,0,0,12">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="200"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="RAM / Clipboard Hygiene" Foreground="{DynamicResource TextSecondaryBrush}" FontWeight="Medium"/>
+                        <TextBlock Grid.Column="1" Text="SHA-256 Verified Auto-Clearing Clipboard Engine" Foreground="{DynamicResource TextPrimaryBrush}" FontWeight="SemiBold"/>
+                    </Grid>
+
+                    <Grid Margin="0,0,0,12">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="200"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="Privacy Guarantee" Foreground="{DynamicResource TextSecondaryBrush}" FontWeight="Medium"/>
+                        <TextBlock Grid.Column="1" Text="100% Offline by default. Zero telemetry or server leaks." Foreground="{DynamicResource SuccessBrush}" FontWeight="SemiBold"/>
+                    </Grid>
+                </StackPanel>
+            </Border>
+
+            <!-- Shortcuts Guide -->
+            <Border Style="{DynamicResource ModernCard}">
+                <StackPanel>
+                    <TextBlock Text="Keyboard Shortcuts" FontSize="16" FontWeight="SemiBold" Foreground="{DynamicResource TextPrimaryBrush}" Margin="0,0,0,15"/>
+                    <UniformGrid Columns="2">
+                        <TextBlock Text="Ctrl + G : Generate New Password" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="13" Margin="0,4"/>
+                        <TextBlock Text="Ctrl + C : Copy Current Password" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="13" Margin="0,4"/>
+                        <TextBlock Text="Ctrl + R : Regenerate" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="13" Margin="0,4"/>
+                        <TextBlock Text="Ctrl + H : Jump to History" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="13" Margin="0,4"/>
+                        <TextBlock Text="Ctrl + , : Open Settings" Foreground="{DynamicResource TextSecondaryBrush}" FontSize="13" Margin="0,4"/>
+                    </UniformGrid>
+                </StackPanel>
+            </Border>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>
